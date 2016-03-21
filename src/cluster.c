@@ -377,7 +377,7 @@ int clusterLockConfig(char *filename) {
      * it does not exist, otherwise there is a race condition with other
      * processes. */
     int fd = open(filename,O_WRONLY|O_CREAT,0644);
-    if (fd == -1) {
+    if (fd < 0) {
         serverLog(LL_WARNING,
             "Can't open %s in order to acquire a lock: %s",
             filename, strerror(errno));
@@ -4068,7 +4068,7 @@ void clusterCommand(client *c) {
             }
             if ((n = clusterLookupNode(c->argv[4]->ptr)) == NULL) {
                 addReplyErrorFormat(c,"I don't know about node %s",
-                    (char*)c->argv[3]->ptr);
+                    (char*)c->argv[4]->ptr);
                 return;
             }
             server.cluster->importing_slots_from[slot] = n;
